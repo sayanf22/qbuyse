@@ -121,7 +121,11 @@ const TermsPage = () => {
           <section className="space-y-4">
             <h3 className="text-lg font-semibold text-gray-900">10. Contact Information</h3>
             <p className="text-gray-700 leading-relaxed">
+<<<<<<< HEAD
               If you have any questions about these Terms and Conditions, please contact us at support@qbuyse.com
+=======
+              If you have any questions about these Terms and Conditions, please contact us at qbuyse0@gmail.com
+>>>>>>> c919ab7 (updates new)
             </p>
           </section>
 

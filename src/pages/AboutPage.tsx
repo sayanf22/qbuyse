@@ -149,7 +149,11 @@ const AboutPage = () => {
             Have questions, suggestions, or need help? We'd love to hear from you!
           </p>
           <div className="space-y-2 text-gray-700">
+<<<<<<< HEAD
             <p><strong>Email:</strong> support@qbuyse.com</p>
+=======
+            <p><strong>Email:</strong> qbuyse0@gmail.com</p>
+>>>>>>> c919ab7 (updates new)
             <p><strong>Support Hours:</strong> Monday - Friday, 9:00 AM - 6:00 PM IST</p>
           </div>
         </div>

@@ -4,6 +4,10 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import PostCard from "@/components/PostCard";
+<<<<<<< HEAD
+=======
+import { SEOHead } from "@/components/SEOHead";
+>>>>>>> c919ab7 (updates new)
 import { Search, Filter, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -209,7 +213,16 @@ const SearchPage = () => {
   const hasActiveFilters = searchType !== "all" || typeFilter !== "ALL" || stateFilter !== "ALL" || minPrice || maxPrice;
 
   return (
+<<<<<<< HEAD
     <div className="min-h-screen bg-gray-50 animate-fade-in">
+=======
+    <div className="min-h-screen bg-background animate-fade-in">
+      <SEOHead 
+        title="Search Marketplace"
+        description="Search for products and services in India's leading local marketplace. Find what you need or discover something new near you"
+        keywords={['search marketplace', 'find products', 'local search', 'buy near me', 'discover deals']}
+      />
+>>>>>>> c919ab7 (updates new)
       {/* Header */}
       <div className="bg-white shadow-sm sticky top-0 z-40">
         <div className="px-4 py-4">

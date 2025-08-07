@@ -114,7 +114,18 @@ const RealTimeChat = ({ receiverId, receiverName, postId, onBack }: RealTimeChat
   const sendMessage = async () => {
     if (!newMessage.trim() || !currentUser) return;
 
+<<<<<<< HEAD
     const messageText = newMessage.trim();
+=======
+    let messageText = newMessage.trim();
+    
+    // If there's post info, prepend it to the message
+    if (postInfo) {
+      const postDetails = `🛍️ Product: ${postInfo.title}\n💰 Price: ${postInfo.price ? `₹${postInfo.price.toLocaleString()}` : 'Not specified'}\n📝 ${postInfo.description ? postInfo.description.substring(0, 100) : 'No description'}${postInfo.description && postInfo.description.length > 100 ? '...' : ''}\n\n`;
+      messageText = postDetails + messageText;
+    }
+
+>>>>>>> c919ab7 (updates new)
     const optimisticMessage: Message = {
       id: `temp-${Date.now()}`,
       message: messageText,
@@ -129,6 +140,47 @@ const RealTimeChat = ({ receiverId, receiverName, postId, onBack }: RealTimeChat
       return [...oldData, optimisticMessage];
     });
 
+<<<<<<< HEAD
+=======
+    // Immediately update the chat list preview as well (optimistic update)
+    queryClient.setQueryData(["user-chats", currentUser.id], (oldChats: any[] | undefined) => {
+      if (!oldChats) return oldChats;
+      
+      // Find existing chat or create new one
+      const existingChatIndex = oldChats.findIndex(chat => chat.other_user.id === receiverId);
+      
+      if (existingChatIndex >= 0) {
+        // Update existing chat with new message
+        const updatedChats = [...oldChats];
+        updatedChats[existingChatIndex] = {
+          ...updatedChats[existingChatIndex],
+          message: messageText,
+          created_at: new Date().toISOString(),
+          sender_id: currentUser.id,
+          receiver_id: receiverId
+        };
+        // Move to top
+        const updatedChat = updatedChats.splice(existingChatIndex, 1)[0];
+        return [updatedChat, ...updatedChats];
+      } else {
+        // Create new chat entry if it doesn't exist
+        const newChatEntry = {
+          id: optimisticMessage.id,
+          sender_id: currentUser.id,
+          receiver_id: receiverId,
+          message: messageText,
+          created_at: new Date().toISOString(),
+          other_user: {
+            id: receiverId,
+            full_name: receiverName,
+            profile_img: null
+          }
+        };
+        return [newChatEntry, ...oldChats];
+      }
+    });
+
+>>>>>>> c919ab7 (updates new)
     // Clear the input immediately
     setNewMessage("");
 
@@ -150,6 +202,52 @@ const RealTimeChat = ({ receiverId, receiverName, postId, onBack }: RealTimeChat
         );
       });
 
+<<<<<<< HEAD
+=======
+      // Optimistically update the chat list as well
+      queryClient.setQueryData(["user-chats", currentUser.id], (oldChats: any[] | undefined) => {
+        if (!oldChats) return oldChats;
+        
+        // Find existing chat or create new one
+        const existingChatIndex = oldChats.findIndex(chat => chat.other_user.id === receiverId);
+        
+        if (existingChatIndex >= 0) {
+          // Update existing chat with new message
+          const updatedChats = [...oldChats];
+          updatedChats[existingChatIndex] = {
+            ...updatedChats[existingChatIndex],
+            message: messageText,
+            created_at: new Date().toISOString(),
+            sender_id: currentUser.id,
+            receiver_id: receiverId
+          };
+          // Move to top
+          const updatedChat = updatedChats.splice(existingChatIndex, 1)[0];
+          return [updatedChat, ...updatedChats];
+        } else {
+          // Create new chat entry if it doesn't exist
+          const newChatEntry = {
+            id: data.id,
+            sender_id: currentUser.id,
+            receiver_id: receiverId,
+            message: messageText,
+            created_at: new Date().toISOString(),
+            other_user: {
+              id: receiverId,
+              full_name: receiverName, // Use the receiver name passed from props
+              profile_img: null
+            }
+          };
+          return [newChatEntry, ...oldChats];
+        }
+      });
+
+      // Clear postInfo after sending message with it
+      if (postInfo) {
+        setPostInfo(null);
+      }
+
+>>>>>>> c919ab7 (updates new)
     } catch (error: any) {
       console.error("Error sending message:", error);
       
@@ -166,6 +264,7 @@ const RealTimeChat = ({ receiverId, receiverName, postId, onBack }: RealTimeChat
       });
 
       // Restore the message to the input
+<<<<<<< HEAD
       setNewMessage(messageText);
     }
   };
@@ -177,14 +276,140 @@ const RealTimeChat = ({ receiverId, receiverName, postId, onBack }: RealTimeChat
         <button
           onClick={onBack}
           className="p-2 hover:bg-gray-100 rounded-full mr-3 transition-colors"
+=======
+      setNewMessage(newMessage.trim());
+    }
+  };
+
+  const [postInfo, setPostInfo] = useState<any>(null);
+
+  // Fetch post info if postId is provided
+  useEffect(() => {
+    if (postId) {
+      const fetchPostInfo = async () => {
+        try {
+          const { data, error } = await supabase
+            .from("posts")
+            .select("id, title, description, price, images, type")
+            .eq("id", postId)
+            .maybeSingle();
+          
+          if (error) throw error;
+          console.log("Fetched post info:", data);
+          setPostInfo(data);
+        } catch (error) {
+          console.error("Error fetching post info:", error);
+        }
+      };
+      fetchPostInfo();
+    } else {
+      setPostInfo(null);
+    }
+  }, [postId]);
+
+  // Send initial message with post info when entering from a post
+  useEffect(() => {
+    if (postInfo && currentUser && messages?.length === 0) {
+      const sendInitialMessage = async () => {
+        const initialMessage = `Hi! I'm interested in your post: "${postInfo.title}"${postInfo.price ? ` (₹${postInfo.price.toLocaleString()})` : ''}`;
+        
+        try {
+          await supabase.from("chats").insert({
+            sender_id: currentUser.id,
+            receiver_id: receiverId,
+            post_id: postId,
+            message: initialMessage,
+          });
+        } catch (error) {
+          console.error("Error sending initial message:", error);
+        }
+      };
+      
+      // Small delay to ensure messages query has completed
+      setTimeout(sendInitialMessage, 500);
+    }
+  }, [postInfo, currentUser, receiverId, postId, messages?.length]);
+
+  return (
+    <div className="flex flex-col h-screen bg-background">
+      {/* Header */}
+      <div className="bg-background shadow-sm border-b border-border p-4 flex items-center">
+        <button
+          onClick={onBack}
+          className="p-2 hover:bg-muted rounded-full mr-3 transition-colors"
+>>>>>>> c919ab7 (updates new)
         >
           <ArrowLeft size={20} />
         </button>
         <div className="flex-1">
+<<<<<<< HEAD
           <h2 className="font-semibold text-gray-900">{receiverName}</h2>
         </div>
       </div>
 
+=======
+          <button
+            onClick={() => window.open(`/user/${receiverId}`, '_blank')}
+            className="font-semibold text-foreground hover:text-primary transition-colors"
+          >
+            {receiverName}
+          </button>
+        </div>
+      </div>
+
+      {/* Post Preview - Only show when coming from a post */}
+      {postInfo && (
+        <div className="bg-background border-b border-border p-4 animate-fade-in">
+          <div 
+            onClick={() => window.open(`/post/${postInfo.id}`, '_blank')}
+            className="bg-muted/50 rounded-lg p-3 cursor-pointer hover:bg-muted/70 transition-colors"
+          >
+            <div className="flex items-center space-x-3">
+              {/* Product Image */}
+              <div className="w-16 h-16 rounded-lg overflow-hidden bg-muted flex-shrink-0">
+                {postInfo.images && postInfo.images.length > 0 ? (
+                  <img 
+                    src={postInfo.images[0]} 
+                    alt={postInfo.title}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-muted flex items-center justify-center">
+                    <span className="text-muted-foreground text-xs">No Image</span>
+                  </div>
+                )}
+              </div>
+              
+              {/* Product Details */}
+              <div className="flex-1 min-w-0">
+                <h3 className="font-medium text-foreground text-sm truncate">
+                  {postInfo.title}
+                </h3>
+                {postInfo.description && (
+                  <p className="text-muted-foreground text-xs mt-1 line-clamp-2">
+                    {postInfo.description}
+                  </p>
+                )}
+                <div className="flex items-center justify-between mt-2">
+                  <span className="text-xs text-muted-foreground bg-muted px-2 py-1 rounded">
+                    {postInfo.type}
+                  </span>
+                  {postInfo.price && (
+                    <span className="text-sm font-semibold text-primary">
+                      ₹{postInfo.price.toLocaleString()}
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className="text-xs text-muted-foreground mt-2 text-center">
+              Tap to view full product details
+            </div>
+          </div>
+        </div>
+      )}
+
+>>>>>>> c919ab7 (updates new)
       {/* Messages */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {isLoading ? (
@@ -206,7 +431,38 @@ const RealTimeChat = ({ receiverId, receiverName, postId, onBack }: RealTimeChat
                     : "bg-gray-100 text-gray-900"
                 }`}
               >
+<<<<<<< HEAD
                 <p className="text-sm">{message.message}</p>
+=======
+                {/* Check if message contains product info */}
+                {message.message.includes("🛍️ Product:") ? (
+                  <div className="space-y-2">
+                    {message.message.split('\n\n').map((part, index) => (
+                      <div key={index}>
+                        {index === 0 ? (
+                          // Product details part
+                          <div className={`text-xs p-2 rounded border ${
+                            message.sender_id === currentUser?.id
+                              ? "bg-teal-400 border-teal-300"
+                              : "bg-muted border-border"
+                          }`}>
+                            {part.split('\n').map((line, lineIndex) => (
+                              <div key={lineIndex} className="flex items-start space-x-1">
+                                <span>{line}</span>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          // User message part
+                          <p className="text-sm">{part}</p>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-sm">{message.message}</p>
+                )}
+>>>>>>> c919ab7 (updates new)
                 <p
                   className={`text-xs mt-1 ${
                     message.sender_id === currentUser?.id
@@ -231,7 +487,11 @@ const RealTimeChat = ({ receiverId, receiverName, postId, onBack }: RealTimeChat
       </div>
 
       {/* Message Input */}
+<<<<<<< HEAD
       <div className="border-t p-4 bg-white">
+=======
+      <div className="border-t border-border p-4 bg-background">
+>>>>>>> c919ab7 (updates new)
         <div className="flex space-x-2">
           <Input
             value={newMessage}

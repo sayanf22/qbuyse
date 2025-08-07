@@ -9,6 +9,10 @@ import { toast } from "@/hooks/use-toast";
 import { useQuery } from "@tanstack/react-query";
 import PostCard from "@/components/PostCard";
 import UsernameSetup from "@/components/UsernameSetup";
+<<<<<<< HEAD
+=======
+import { SEOHead } from "@/components/SEOHead";
+>>>>>>> c919ab7 (updates new)
 
 const ProfilePage = () => {
   const [activeTab, setActiveTab] = useState<"listings" | "settings">("listings");
@@ -327,7 +331,16 @@ const ProfilePage = () => {
   }
 
   return (
+<<<<<<< HEAD
     <div className="min-h-screen bg-gray-50">
+=======
+    <div className="min-h-screen bg-background">
+      <SEOHead 
+        title="Your Profile & Listings"
+        description="Manage your marketplace profile, view your listings, and track your buying and selling activity on Qbuyse"
+        keywords={['user profile', 'my listings', 'marketplace account', 'manage posts', 'selling history']}
+      />
+>>>>>>> c919ab7 (updates new)
       <div className="bg-white">
         <div className="px-4 sm:px-6 py-8 max-w-2xl mx-auto">
           {/* Profile Header */}

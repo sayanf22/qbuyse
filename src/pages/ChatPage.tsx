@@ -23,6 +23,10 @@ const ChatPage = () => {
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [selectedChat, setSelectedChat] = useState<string | null>(null);
   const [selectedUserName, setSelectedUserName] = useState<string>("");
+<<<<<<< HEAD
+=======
+  const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
+>>>>>>> c919ab7 (updates new)
   const location = useLocation();
   const [searchParams] = useSearchParams();
 
@@ -43,18 +47,35 @@ const ChatPage = () => {
     const handleChatNavigation = async () => {
       if (!currentUser) return;
 
+<<<<<<< HEAD
       // Check for URL parameter first (from UserProfilePage)
       const userIdFromUrl = searchParams.get('user');
+=======
+      // Check for URL parameters (userId, postId)
+      const userIdFromUrl = searchParams.get('userId');
+      const postIdFromUrl = searchParams.get('postId');
+      
+>>>>>>> c919ab7 (updates new)
       if (userIdFromUrl) {
         try {
           const { data: profile } = await supabase
             .from("profiles")
             .select("full_name")
             .eq("id", userIdFromUrl)
+<<<<<<< HEAD
             .single();
           
           setSelectedChat(userIdFromUrl);
           setSelectedUserName(profile?.full_name || "Unknown User");
+=======
+            .maybeSingle();
+          
+          setSelectedChat(userIdFromUrl);
+          setSelectedUserName(profile?.full_name || "Unknown User");
+          if (postIdFromUrl) {
+            setSelectedPostId(postIdFromUrl);
+          }
+>>>>>>> c919ab7 (updates new)
           return;
         } catch (error) {
           console.error("Error fetching user profile from URL:", error);
@@ -70,10 +91,20 @@ const ChatPage = () => {
             .from("profiles")
             .select("full_name")
             .eq("id", receiverId)
+<<<<<<< HEAD
             .single();
           
           setSelectedChat(receiverId);
           setSelectedUserName(profile?.full_name || "Unknown User");
+=======
+            .maybeSingle();
+          
+          setSelectedChat(receiverId);
+          setSelectedUserName(profile?.full_name || "Unknown User");
+          if (postId) {
+            setSelectedPostId(postId);
+          }
+>>>>>>> c919ab7 (updates new)
         } catch (error) {
           console.error("Error fetching receiver profile:", error);
         }
@@ -83,7 +114,11 @@ const ChatPage = () => {
     handleChatNavigation();
   }, [location.state, currentUser, searchParams]);
 
+<<<<<<< HEAD
   const { data: chats, isLoading } = useQuery({
+=======
+  const { data: chats, isLoading, refetch } = useQuery({
+>>>>>>> c919ab7 (updates new)
     queryKey: ["user-chats", currentUser?.id],
     queryFn: async (): Promise<Chat[]> => {
       if (!currentUser) return [];
@@ -133,15 +168,70 @@ const ChatPage = () => {
     enabled: !!currentUser,
   });
 
+<<<<<<< HEAD
+=======
+  // Set up real-time subscription for new chats
+  useEffect(() => {
+    if (!currentUser) return;
+
+    const channel = supabase
+      .channel(`chats-${currentUser.id}`)
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'chats',
+          filter: `or(sender_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id})`
+        },
+        (payload) => {
+          console.log('Chat change detected:', payload);
+          // Refetch chats when new messages arrive
+          refetch();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [currentUser, refetch]);
+
+  // Also set up a subscription specifically for when user sends a message
+  useEffect(() => {
+    if (!currentUser) return;
+
+    const handleRouteChange = () => {
+      // If navigating to chat page from sending a message, refetch immediately
+      refetch();
+    };
+
+    // Listen for focus events to refetch when returning to tab
+    window.addEventListener('focus', handleRouteChange);
+    
+    return () => {
+      window.removeEventListener('focus', handleRouteChange);
+    };
+  }, [currentUser, refetch]);
+
+>>>>>>> c919ab7 (updates new)
   if (selectedChat) {
     return (
       <RealTimeChat
         receiverId={selectedChat}
         receiverName={selectedUserName}
+<<<<<<< HEAD
         postId={location.state?.postId}
         onBack={() => {
           setSelectedChat(null);
           setSelectedUserName("");
+=======
+        postId={selectedPostId || location.state?.postId}
+        onBack={() => {
+          setSelectedChat(null);
+          setSelectedUserName("");
+          setSelectedPostId(null);
+>>>>>>> c919ab7 (updates new)
         }}
       />
     );

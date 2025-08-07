@@ -15,6 +15,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+<<<<<<< HEAD
+=======
+import { categories } from "@/utils/categories";
+>>>>>>> c919ab7 (updates new)
 
 const PostPage = () => {
   const navigate = useNavigate();
@@ -28,6 +32,10 @@ const PostPage = () => {
     price: "",
     images: [] as string[],
   });
+<<<<<<< HEAD
+=======
+  const [selectedCategory, setSelectedCategory] = useState("Others");
+>>>>>>> c919ab7 (updates new)
 
 
   const indianStates = [
@@ -55,6 +63,10 @@ const PostPage = () => {
         price: formData.price ? parseFloat(formData.price) : null,
         type: postType,
         state: selectedState,
+<<<<<<< HEAD
+=======
+        category: selectedCategory,
+>>>>>>> c919ab7 (updates new)
         images: formData.images,
         user_id: user.id,
       });
@@ -227,8 +239,36 @@ const PostPage = () => {
           </div>
         </div>
 
+<<<<<<< HEAD
         {/* State Selection */}
         <div className="animate-fade-in" style={{ animationDelay: '0.2s' }}>
+=======
+        {/* Category Selection */}
+        <div className="animate-fade-in" style={{ animationDelay: '0.2s' }}>
+          <Label className="text-base font-semibold">Select Category</Label>
+          <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+            <SelectTrigger className="w-full mt-2 rounded-xl border border-gray-200 bg-white px-3 py-3">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent className="max-h-60 overflow-y-auto">
+              {categories.map((category) => {
+                const IconComponent = category.icon;
+                return (
+                  <SelectItem key={category.id} value={category.id}>
+                    <div className="flex items-center space-x-2">
+                      <IconComponent size={16} />
+                      <span>{category.name}</span>
+                    </div>
+                  </SelectItem>
+                );
+              })}
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* State Selection */}
+        <div className="animate-fade-in" style={{ animationDelay: '0.3s' }}>
+>>>>>>> c919ab7 (updates new)
           <Label className="text-base font-semibold">Select State</Label>
           <Select value={selectedState} onValueChange={setSelectedState}>
             <SelectTrigger className="w-full mt-2 rounded-xl border border-gray-200 bg-white px-3 py-3">
@@ -245,7 +285,11 @@ const PostPage = () => {
         </div>
 
         {/* Title */}
+<<<<<<< HEAD
         <div className="space-y-2 animate-fade-in" style={{ animationDelay: '0.3s' }}>
+=======
+        <div className="space-y-2 animate-fade-in" style={{ animationDelay: '0.4s' }}>
+>>>>>>> c919ab7 (updates new)
           <Label htmlFor="title" className="text-base font-semibold">
             {postType === "SELL" ? "What are you selling?" : "What are you looking for?"}
           </Label>
@@ -260,7 +304,11 @@ const PostPage = () => {
         </div>
 
         {/* Price */}
+<<<<<<< HEAD
         <div className="space-y-2 animate-fade-in" style={{ animationDelay: '0.4s' }}>
+=======
+        <div className="space-y-2 animate-fade-in" style={{ animationDelay: '0.5s' }}>
+>>>>>>> c919ab7 (updates new)
           <Label htmlFor="price" className="text-base font-semibold">
             {postType === "SELL" ? "Price" : "Budget"} (Optional)
           </Label>
@@ -278,7 +326,11 @@ const PostPage = () => {
         </div>
 
         {/* Description */}
+<<<<<<< HEAD
         <div className="space-y-2 animate-fade-in" style={{ animationDelay: '0.5s' }}>
+=======
+        <div className="space-y-2 animate-fade-in" style={{ animationDelay: '0.6s' }}>
+>>>>>>> c919ab7 (updates new)
           <Label htmlFor="description" className="text-base font-semibold">
             Description
           </Label>
@@ -293,7 +345,11 @@ const PostPage = () => {
         </div>
 
         {/* Images */}
+<<<<<<< HEAD
         <div className="space-y-2 animate-fade-in" style={{ animationDelay: '0.6s' }}>
+=======
+        <div className="space-y-2 animate-fade-in" style={{ animationDelay: '0.7s' }}>
+>>>>>>> c919ab7 (updates new)
           <Label className="text-base font-semibold">Photos (Up to 3)</Label>
           
           {/* Hidden file input */}
@@ -346,7 +402,11 @@ const PostPage = () => {
         </div>
 
         {/* Submit Button */}
+<<<<<<< HEAD
         <div className="animate-fade-in" style={{ animationDelay: '0.7s' }}>
+=======
+        <div className="animate-fade-in" style={{ animationDelay: '0.8s' }}>
+>>>>>>> c919ab7 (updates new)
           <Button
             type="submit"
             className="w-full bg-teal-500 hover:bg-teal-600 rounded-xl py-4 text-lg font-semibold transition-all duration-200"

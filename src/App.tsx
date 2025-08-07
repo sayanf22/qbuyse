@@ -1,11 +1,20 @@
 
+<<<<<<< HEAD
 import React, { useState, useEffect } from "react";
+=======
+import React, { useState } from "react";
+>>>>>>> c919ab7 (updates new)
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+<<<<<<< HEAD
 import { supabase } from "@/integrations/supabase/client";
+=======
+import { AuthProvider } from "@/hooks/useAuth";
+import { ThemeProvider } from "@/components/ThemeProvider";
+>>>>>>> c919ab7 (updates new)
 import Index from "./pages/Index";
 import AuthPage from "./pages/AuthPage";
 import HomePage from "./pages/HomePage";
@@ -16,6 +25,10 @@ import ProfilePage from "./pages/ProfilePage";
 import UserProfilePage from "./pages/UserProfilePage";
 import TermsPage from "./pages/TermsPage";
 import AboutPage from "./pages/AboutPage";
+<<<<<<< HEAD
+=======
+import RefundPolicyPage from "./pages/RefundPolicyPage";
+>>>>>>> c919ab7 (updates new)
 import SettingsPage from "./pages/SettingsPage";
 import HelpSupportPage from "./pages/HelpSupportPage";
 import Layout from "./components/Layout";
@@ -33,6 +46,7 @@ const queryClient = new QueryClient({
 });
 
 const App = () => {
+<<<<<<< HEAD
   const [session, setSession] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showSplash, setShowSplash] = useState(true);
@@ -74,12 +88,17 @@ const App = () => {
     };
   }, []);
 
+=======
+  const [showSplash, setShowSplash] = useState(true);
+
+>>>>>>> c919ab7 (updates new)
   const handleSplashComplete = () => {
     setShowSplash(false);
   };
 
   return (
     <QueryClientProvider client={queryClient}>
+<<<<<<< HEAD
       <TooltipProvider>
         <Toaster />
         <Sonner />
@@ -124,6 +143,43 @@ const App = () => {
           )}
         </BrowserRouter>
       </TooltipProvider>
+=======
+      <ThemeProvider defaultTheme="light" storageKey="qbuyse-ui-theme">
+        <AuthProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              {showSplash ? (
+                <SplashScreen onComplete={handleSplashComplete} />
+              ) : (
+                <Layout>
+                  <Routes>
+                    {/* Public routes - accessible without authentication */}
+                    <Route path="/auth" element={<AuthPage />} />
+                    <Route path="/terms" element={<TermsPage />} />
+                    <Route path="/about" element={<AboutPage />} />
+                    <Route path="/refund-policy" element={<RefundPolicyPage />} />
+                    <Route path="/settings" element={<SettingsPage />} />
+                    <Route path="/help-support" element={<HelpSupportPage />} />
+                    <Route path="/post" element={<PostPage />} />
+                    <Route path="/chats" element={<ChatPage />} />
+                    <Route path="/chat" element={<ChatPage />} />
+                    <Route path="/profile" element={<ProfilePage />} />
+
+                    {/* Main layout routes - accessible to everyone but interactions gated */}
+                    <Route path="/" element={<HomePage />} />
+                    <Route path="/search" element={<SearchPage />} />
+                    <Route path="/user/:userId" element={<UserProfilePage />} />
+                    <Route path="*" element={<Navigate to="/" replace />} />
+                  </Routes>
+                </Layout>
+              )}
+            </BrowserRouter>
+          </TooltipProvider>
+        </AuthProvider>
+      </ThemeProvider>
+>>>>>>> c919ab7 (updates new)
     </QueryClientProvider>
   );
 };

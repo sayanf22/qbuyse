@@ -202,7 +202,11 @@ const HelpSupportPage = () => {
                 <CardContent>
                   <p className="text-sm text-gray-600 mb-3">Get help via email</p>
                   <Button variant="outline" size="sm" className="w-full">
+<<<<<<< HEAD
                     support@qbuyse.com
+=======
+                    qbuyse0@gmail.com
+>>>>>>> c919ab7 (updates new)
                   </Button>
                 </CardContent>
               </Card>

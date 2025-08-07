@@ -8,11 +8,21 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
+<<<<<<< HEAD
 
 const SettingsPage = () => {
   const navigate = useNavigate();
   const [language, setLanguage] = useState("en");
   const [darkMode, setDarkMode] = useState(false);
+=======
+import { useTheme } from "@/components/ThemeProvider";
+import { SEOHead } from "@/components/SEOHead";
+
+const SettingsPage = () => {
+  const navigate = useNavigate();
+  const { theme, setTheme } = useTheme();
+  const [language, setLanguage] = useState("en");
+>>>>>>> c919ab7 (updates new)
   const [notifications, setNotifications] = useState(true);
   const [chatNotifications, setChatNotifications] = useState(true);
   const [emailNotifications, setEmailNotifications] = useState(false);
@@ -20,13 +30,19 @@ const SettingsPage = () => {
   useEffect(() => {
     // Load saved settings from localStorage
     const savedLanguage = localStorage.getItem("app-language") || "en";
+<<<<<<< HEAD
     const savedDarkMode = localStorage.getItem("dark-mode") === "true";
+=======
+>>>>>>> c919ab7 (updates new)
     const savedNotifications = localStorage.getItem("notifications") !== "false";
     const savedChatNotifications = localStorage.getItem("chat-notifications") !== "false";
     const savedEmailNotifications = localStorage.getItem("email-notifications") === "true";
 
     setLanguage(savedLanguage);
+<<<<<<< HEAD
     setDarkMode(savedDarkMode);
+=======
+>>>>>>> c919ab7 (updates new)
     setNotifications(savedNotifications);
     setChatNotifications(savedChatNotifications);
     setEmailNotifications(savedEmailNotifications);
@@ -41,6 +57,7 @@ const SettingsPage = () => {
     });
   };
 
+<<<<<<< HEAD
   const handleDarkModeToggle = (enabled: boolean) => {
     setDarkMode(enabled);
     localStorage.setItem("dark-mode", enabled.toString());
@@ -53,6 +70,14 @@ const SettingsPage = () => {
     toast({
       title: "Theme Updated",
       description: `${enabled ? "Dark" : "Light"} mode enabled`,
+=======
+  const handleThemeToggle = () => {
+    const newTheme = theme === "light" ? "dark" : "light";
+    setTheme(newTheme);
+    toast({
+      title: "Theme Updated",
+      description: `${newTheme === "dark" ? "Dark" : "Light"} mode enabled`,
+>>>>>>> c919ab7 (updates new)
     });
   };
 
@@ -94,7 +119,16 @@ const SettingsPage = () => {
   };
 
   return (
+<<<<<<< HEAD
     <div className="min-h-screen bg-gray-50">
+=======
+    <div className="min-h-screen bg-background">
+      <SEOHead 
+        title="Settings"
+        description="Customize your Qbuyse marketplace experience - language, notifications, theme and privacy settings for India's local marketplace"
+        keywords={['settings', 'preferences', 'notifications', 'dark mode', 'language settings']}
+      />
+>>>>>>> c919ab7 (updates new)
       {/* Header */}
       <div className="bg-white shadow-sm border-b p-4 flex items-center">
         <Button
@@ -162,7 +196,11 @@ const SettingsPage = () => {
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
                   <Label className="flex items-center gap-2">
+<<<<<<< HEAD
                     {darkMode ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+=======
+                    {theme === "dark" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+>>>>>>> c919ab7 (updates new)
                     Dark Mode
                   </Label>
                   <p className="text-sm text-gray-500">
@@ -170,8 +208,13 @@ const SettingsPage = () => {
                   </p>
                 </div>
                 <Switch
+<<<<<<< HEAD
                   checked={darkMode}
                   onCheckedChange={handleDarkModeToggle}
+=======
+                  checked={theme === "dark"}
+                  onCheckedChange={handleThemeToggle}
+>>>>>>> c919ab7 (updates new)
                 />
               </div>
             </div>

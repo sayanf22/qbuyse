@@ -28,6 +28,13 @@ const NotificationPanel = ({ onClose }: NotificationPanelProps) => {
       if (error) throw error;
       return data;
     },
+<<<<<<< HEAD
+=======
+    staleTime: 0, // Always fetch fresh data for notifications
+    gcTime: 1 * 60 * 1000, // 1 minute
+    refetchOnWindowFocus: true,
+    refetchInterval: 30000, // Refresh every 30 seconds as fallback
+>>>>>>> c919ab7 (updates new)
   });
 
   const markAsReadMutation = useMutation({

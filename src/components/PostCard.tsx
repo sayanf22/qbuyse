@@ -1,4 +1,8 @@
 import { MessageCircle, Share2, Trash2, MoreVertical, Send, Copy, Facebook, Twitter, Reply, Edit, ChevronLeft, ChevronRight } from "lucide-react";
+<<<<<<< HEAD
+=======
+import { getCategoryById } from "@/utils/categories";
+>>>>>>> c919ab7 (updates new)
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -22,6 +26,10 @@ import {
 import {
   Dialog,
   DialogContent,
+<<<<<<< HEAD
+=======
+  DialogDescription,
+>>>>>>> c919ab7 (updates new)
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -43,6 +51,13 @@ import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { formatDistanceToNow } from "date-fns";
 import { useNavigate } from "react-router-dom";
+<<<<<<< HEAD
+=======
+import { useAuth } from "@/hooks/useAuth";
+import { AuthModal } from "@/components/AuthModal";
+import { useAuthModal } from "@/hooks/useAuthModal";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+>>>>>>> c919ab7 (updates new)
 
 interface Discussion {
   id: string;
@@ -55,6 +70,10 @@ interface Discussion {
   profiles?: {
     full_name: string;
     username: string;
+<<<<<<< HEAD
+=======
+    profile_img?: string;
+>>>>>>> c919ab7 (updates new)
   };
   replies?: Discussion[];
 }
@@ -66,6 +85,10 @@ interface PostCardProps {
     description: string;
     price: number;
     type: string;
+<<<<<<< HEAD
+=======
+    category?: string;
+>>>>>>> c919ab7 (updates new)
     images: string[];
     created_at: string;
     user_id: string;
@@ -77,7 +100,11 @@ interface PostCardProps {
 }
 
 const PostCard = ({ post, onDelete }: PostCardProps) => {
+<<<<<<< HEAD
   const [currentUser, setCurrentUser] = useState<any>(null);
+=======
+  const { user: currentUser } = useAuth();
+>>>>>>> c919ab7 (updates new)
   const [isDeleting, setIsDeleting] = useState(false);
   const [showDiscussion, setShowDiscussion] = useState(false);
   const [newComment, setNewComment] = useState("");
@@ -85,6 +112,7 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+<<<<<<< HEAD
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
@@ -101,6 +129,17 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
     };
     getCurrentUser();
   }, [post.user_id]);
+=======
+  const [isEditing, setIsEditing] = useState(false);
+  const [editTitle, setEditTitle] = useState(post.title);
+  const [editDescription, setEditDescription] = useState(post.description);
+  const [editPrice, setEditPrice] = useState(post.price);
+  const [showFullDescription, setShowFullDescription] = useState(false);
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+  const { isOpen, defaultTab, openModal, closeModal } = useAuthModal();
+
+>>>>>>> c919ab7 (updates new)
 
   // Fetch discussions for this post
   const { data: discussions, isLoading: discussionsLoading, refetch: refetchDiscussions } = useQuery({
@@ -133,7 +172,11 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
             data.map(async (discussion) => {
               const { data: profile } = await supabase
                 .from("profiles")
+<<<<<<< HEAD
                 .select("full_name, username")
+=======
+                .select("full_name, username, profile_img")
+>>>>>>> c919ab7 (updates new)
                 .eq("id", discussion.user_id)
                 .single();
               
@@ -457,11 +500,15 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
 
   const handleChat = () => {
     if (!currentUser) {
+<<<<<<< HEAD
       toast({
         title: "Please login",
         description: "You need to be logged in to chat.",
         variant: "destructive",
       });
+=======
+      openModal("login");
+>>>>>>> c919ab7 (updates new)
       return;
     }
 
@@ -474,12 +521,55 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
       return;
     }
 
+<<<<<<< HEAD
     navigate('/chat', { 
       state: { 
         receiverId: post.user_id,
         postId: post.id 
       } 
     });
+=======
+    navigate(`/chat?userId=${post.user_id}&userName=${post.profile_full_name || post.profile_username || 'User'}&postId=${post.id}`);
+  };
+
+  const handleDiscussion = () => {
+    if (!currentUser) {
+      openModal("login");
+      return;
+    }
+    setShowDiscussion(!showDiscussion);
+  };
+
+  const updatePost = async () => {
+    if (!currentUser || currentUser.id !== post.user_id) return;
+
+    try {
+      const { error } = await supabase
+        .from("posts")
+        .update({
+          title: editTitle,
+          description: editDescription,
+          price: editPrice,
+        })
+        .eq("id", post.id);
+
+      if (error) throw error;
+
+      toast({
+        title: "Post updated",
+        description: "Your post has been updated successfully.",
+      });
+
+      setIsEditing(false);
+      if (onDelete) onDelete(); // Trigger refresh
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: "Failed to update post",
+        variant: "destructive",
+      });
+    }
+>>>>>>> c919ab7 (updates new)
   };
 
   const renderComment = (discussion: Discussion, isReply = false) => {
@@ -493,16 +583,42 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
 
     return (
       <div key={discussion.id} className={`flex gap-3 ${isReply ? 'ml-8 mt-2' : ''}`}>
+<<<<<<< HEAD
         <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center flex-shrink-0">
           <span className="text-sm font-medium text-teal-700">
             {discussion.profiles?.full_name?.[0] || 'U'}
           </span>
         </div>
+=======
+        <div 
+          className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center flex-shrink-0 cursor-pointer hover:bg-teal-200 transition-colors"
+          onClick={() => navigate(`/user/${discussion.user_id}`)}
+        >
+          {discussion.profiles?.profile_img ? (
+            <img
+              src={discussion.profiles.profile_img}
+              alt={discussion.profiles.full_name || 'User'}
+              className="w-full h-full rounded-full object-cover"
+            />
+          ) : (
+              <span className="text-sm font-medium text-teal-700">
+                {discussion.profiles?.full_name?.[0] || 'U'}
+              </span>
+            )}
+          </div>
+>>>>>>> c919ab7 (updates new)
         <div className="flex-1">
           <div className="bg-gray-50 rounded-lg p-3 relative">
             <div className="flex items-start justify-between">
               <div className="flex-1">
+<<<<<<< HEAD
                 <p className="text-sm font-medium text-gray-900 mb-1">
+=======
+                <p 
+                  className="text-sm font-medium text-gray-900 mb-1 cursor-pointer hover:text-teal-700 transition-colors"
+                  onClick={() => navigate(`/user/${discussion.user_id}`)}
+                >
+>>>>>>> c919ab7 (updates new)
                   {discussion.profiles?.full_name || 'Anonymous'}
                 </p>
                 {discussion.profiles?.username && (
@@ -571,12 +687,17 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
   console.log("Is owner check:", isOwner, "Current user:", currentUser?.id, "Post owner:", post.user_id);
 
   return (
+<<<<<<< HEAD
     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-md">
+=======
+    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-md w-full flex flex-col">
+>>>>>>> c919ab7 (updates new)
       {/* Images Carousel */}
       {post.images && post.images.length > 0 && (
         <div className="relative">
           {post.images.length === 1 ? (
             // Single image - no carousel needed
+<<<<<<< HEAD
             <div className="relative">
               <img
                 src={post.images[0]}
@@ -587,12 +708,44 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
                 }}
               />
             </div>
+=======
+            <Dialog>
+              <DialogTrigger asChild>
+                <div className="relative cursor-pointer">
+                  <img
+                    src={post.images[0]}
+                    alt={post.title}
+                    className="w-full h-48 object-cover hover:opacity-95 transition-opacity"
+                    onError={(e) => {
+                      e.currentTarget.src = "/placeholder.svg";
+                    }}
+                  />
+                </div>
+              </DialogTrigger>
+              <DialogContent className="max-w-4xl max-h-[90vh] p-0">
+                <DialogHeader className="p-4">
+                  <DialogTitle className="text-lg font-semibold">{post.title}</DialogTitle>
+                </DialogHeader>
+                <div className="flex justify-center items-center max-h-[80vh] overflow-hidden">
+                  <img
+                    src={post.images[0]}
+                    alt={post.title}
+                    className="max-w-full max-h-full object-contain"
+                    onError={(e) => {
+                      e.currentTarget.src = "/placeholder.svg";
+                    }}
+                  />
+                </div>
+              </DialogContent>
+            </Dialog>
+>>>>>>> c919ab7 (updates new)
           ) : (
             // Multiple images - use carousel
             <Carousel className="w-full">
               <CarouselContent>
                 {post.images.map((image, index) => (
                   <CarouselItem key={index}>
+<<<<<<< HEAD
                     <div className="relative">
                       <img
                         src={image}
@@ -603,6 +756,37 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
                         }}
                       />
                     </div>
+=======
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <div className="relative cursor-pointer">
+                          <img
+                            src={image}
+                            alt={`${post.title} - Image ${index + 1}`}
+                            className="w-full h-48 object-cover hover:opacity-95 transition-opacity"
+                            onError={(e) => {
+                              e.currentTarget.src = "/placeholder.svg";
+                            }}
+                          />
+                        </div>
+                      </DialogTrigger>
+                      <DialogContent className="max-w-4xl max-h-[90vh] p-0">
+                        <DialogHeader className="p-4">
+                          <DialogTitle className="text-lg font-semibold">{post.title} - Image {index + 1}</DialogTitle>
+                        </DialogHeader>
+                        <div className="flex justify-center items-center max-h-[80vh] overflow-hidden">
+                          <img
+                            src={image}
+                            alt={`${post.title} - Image ${index + 1}`}
+                            className="max-w-full max-h-full object-contain"
+                            onError={(e) => {
+                              e.currentTarget.src = "/placeholder.svg";
+                            }}
+                          />
+                        </div>
+                      </DialogContent>
+                    </Dialog>
+>>>>>>> c919ab7 (updates new)
                   </CarouselItem>
                 ))}
               </CarouselContent>
@@ -638,7 +822,11 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
           )}
           
           {/* 3-dot menu for post owner */}
+<<<<<<< HEAD
           {isOwner && (
+=======
+          {(isOwner || currentUser?.id === post.user_id) && (
+>>>>>>> c919ab7 (updates new)
             <div className="absolute top-3 left-3 z-[20]">
               <DropdownMenu modal={false}>
                 <DropdownMenuTrigger asChild>
@@ -651,12 +839,20 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
                       e.stopPropagation();
                     }}
                   >
+<<<<<<< HEAD
                     <MoreVertical size={16} className="text-gray-600" />
+=======
+                    <MoreVertical size={18} className="text-gray-700" />
+>>>>>>> c919ab7 (updates new)
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent 
                   align="start" 
+<<<<<<< HEAD
                   className="w-36 z-[10] bg-white border shadow-lg"
+=======
+                  className="w-36 z-[50] bg-white border shadow-lg"
+>>>>>>> c919ab7 (updates new)
                   side="bottom"
                   sideOffset={5}
                 >
@@ -664,10 +860,14 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
+<<<<<<< HEAD
                       toast({
                         title: "Coming Soon",
                         description: "Post editing will be available soon.",
                       });
+=======
+                      setIsEditing(true);
+>>>>>>> c919ab7 (updates new)
                     }}
                     className="cursor-pointer"
                   >
@@ -697,6 +897,7 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
         {/* Header with title, price, and 3-dot menu for posts without images */}
         <div className="flex items-start justify-between mb-2">
           <div className="flex-1">
+<<<<<<< HEAD
             <h3 className="font-bold text-lg text-gray-900 mb-1">
               {post.title}
             </h3>
@@ -708,23 +909,85 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
           </div>
           {/* 3-dot menu for post owner (when no image) */}
           {isOwner && (!post.images || post.images.length === 0) && (
+=======
+            {isEditing ? (
+              <div className="space-y-2">
+                <Input
+                  value={editTitle}
+                  onChange={(e) => setEditTitle(e.target.value)}
+                  className="font-bold text-lg"
+                  placeholder="Post title"
+                />
+                <Input
+                  type="number"
+                  value={editPrice}
+                  onChange={(e) => setEditPrice(Number(e.target.value))}
+                  className="text-lg font-bold"
+                  placeholder="Price"
+                />
+                <div className="flex gap-2">
+                  <Button size="sm" onClick={updatePost} className="bg-green-600 hover:bg-green-700">
+                    Save
+                  </Button>
+                  <Button 
+                    size="sm" 
+                    variant="outline" 
+                    onClick={() => {
+                      setIsEditing(false);
+                      setEditTitle(post.title);
+                      setEditDescription(post.description);
+                      setEditPrice(post.price);
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <>
+                <h3 className="font-bold text-lg text-gray-900 mb-1">
+                  {post.title}
+                </h3>
+                {post.price && (
+                  <p className="text-lg font-bold text-gray-900">
+                    {formatPrice(post.price)}
+                  </p>
+                )}
+              </>
+            )}
+          </div>
+          {/* 3-dot menu for post owner (when no image) - Always show for debugging */}
+          {(isOwner || currentUser?.id === post.user_id) && (!post.images || post.images.length === 0) && (
+>>>>>>> c919ab7 (updates new)
             <DropdownMenu modal={false}>
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
                   size="sm"
+<<<<<<< HEAD
                   className="h-8 w-8 p-0 text-gray-400 hover:text-gray-600 z-[20]"
+=======
+                  className="h-8 w-8 p-0 text-gray-600 hover:text-gray-800 hover:bg-gray-100 z-[20] flex-shrink-0"
+>>>>>>> c919ab7 (updates new)
                   disabled={isDeleting}
                   onClick={(e) => {
                     e.stopPropagation();
                   }}
                 >
+<<<<<<< HEAD
                   <MoreVertical size={16} />
+=======
+                  <MoreVertical size={18} />
+>>>>>>> c919ab7 (updates new)
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent 
                 align="end" 
+<<<<<<< HEAD
                 className="w-36 z-[10] bg-white border shadow-lg"
+=======
+                className="w-36 z-[50] bg-white border shadow-lg"
+>>>>>>> c919ab7 (updates new)
                 side="bottom"
                 sideOffset={5}
               >
@@ -732,10 +995,14 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
+<<<<<<< HEAD
                     toast({
                       title: "Coming Soon",
                       description: "Post editing will be available soon.",
                     });
+=======
+                    setIsEditing(true);
+>>>>>>> c919ab7 (updates new)
                   }}
                   className="cursor-pointer"
                 >
@@ -794,14 +1061,51 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
           </div>
         )}
 
+<<<<<<< HEAD
         {/* Description */}
         <p className="text-gray-600 text-sm mb-4 line-clamp-2">
           {post.description}
         </p>
+=======
+        {/* Post Date */}
+        <div className="mb-3">
+          <p className="text-xs text-muted-foreground">
+            {formatDistanceToNow(new Date(post.created_at), { addSuffix: true })}
+          </p>
+        </div>
+
+        {/* Description */}
+        {isEditing ? (
+          <div className="mb-4">
+            <textarea
+              value={editDescription}
+              onChange={(e) => setEditDescription(e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded-lg text-sm resize-none"
+              rows={3}
+              placeholder="Post description"
+            />
+          </div>
+        ) : (
+          <div className="mb-4">
+            <p className={`text-gray-600 text-sm ${showFullDescription ? '' : 'line-clamp-2'}`}>
+              {post.description}
+            </p>
+            {post.description && post.description.length > 100 && (
+              <button
+                onClick={() => setShowFullDescription(!showFullDescription)}
+                className="text-teal-600 hover:text-teal-700 text-sm font-medium mt-1 transition-colors"
+              >
+                {showFullDescription ? 'See less' : 'See more'}
+              </button>
+            )}
+          </div>
+        )}
+>>>>>>> c919ab7 (updates new)
 
         {/* Actions */}
         <div className="flex items-center justify-between gap-2 mb-3">
           <div className="flex items-center gap-2 flex-1">
+<<<<<<< HEAD
             <Collapsible open={showDiscussion} onOpenChange={setShowDiscussion}>
               <CollapsibleTrigger asChild>
                 <Button
@@ -823,6 +1127,39 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
               <MessageCircle size={14} />
               <span>Chat</span>
             </Button>
+=======
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={handleDiscussion}
+                    className="flex items-center gap-1 rounded-full px-3 py-1.5 text-xs hover:bg-gray-50 transition-colors border-gray-200"
+                  >
+                    
+                    <MessageCircle size={14} />
+                    <span>Discussion</span>
+                  </Button>
+                </TooltipTrigger>
+              </Tooltip>
+            </TooltipProvider>
+
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    size="sm"
+                    onClick={handleChat}
+                    className="flex items-center gap-1 bg-teal-500 hover:bg-teal-600 rounded-full px-3 py-1.5 text-xs transition-colors text-white"
+                  >
+                    <MessageCircle size={14} />
+                    <span>Chat</span>
+                  </Button>
+                </TooltipTrigger>
+              </Tooltip>
+            </TooltipProvider>
+>>>>>>> c919ab7 (updates new)
           </div>
 
           <Dialog open={showShareDialog} onOpenChange={setShowShareDialog}>
@@ -837,53 +1174,112 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
               </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-md">
+<<<<<<< HEAD
               <DialogHeader>
                 <DialogTitle>Share this post</DialogTitle>
               </DialogHeader>
               <div className="space-y-4">
+=======
+              <DialogHeader className="text-center pb-4">
+                <DialogTitle className="text-xl font-semibold">Share this post</DialogTitle>
+                <DialogDescription className="text-gray-600">
+                  Choose how you'd like to share this post
+                </DialogDescription>
+              </DialogHeader>
+              <div className="space-y-6">
+>>>>>>> c919ab7 (updates new)
                 {/* Native Share (if supported) */}
                 {navigator.share && (
                   <Button
                     onClick={handleNativeShare}
+<<<<<<< HEAD
                     className="w-full flex items-center justify-center gap-2"
                     variant="outline"
                   >
                     <Share2 size={16} />
+=======
+                    className="w-full flex items-center justify-center gap-3 py-4 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium transition-all"
+                    variant="outline"
+                  >
+                    <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                      <Share2 size={18} className="text-white" />
+                    </div>
+>>>>>>> c919ab7 (updates new)
                     <span>Share via device</span>
                   </Button>
                 )}
                 
                 {/* Social Media Options */}
+<<<<<<< HEAD
                 <div className="grid grid-cols-2 gap-3">
                   <Button
                     onClick={() => handleSocialShare('whatsapp')}
                     className="flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white"
                   >
                     <MessageCircle size={16} />
+=======
+                <div className="grid grid-cols-2 gap-4">
+                  <Button
+                    onClick={() => handleSocialShare('whatsapp')}
+                    className="flex items-center justify-center gap-3 py-4 rounded-xl bg-green-500 hover:bg-green-600 text-white font-medium transition-all transform hover:scale-105"
+                  >
+                    <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center">
+                      <MessageCircle size={16} className="text-green-500" />
+                    </div>
+>>>>>>> c919ab7 (updates new)
                     <span>WhatsApp</span>
                   </Button>
                   
                   <Button
                     onClick={() => handleSocialShare('facebook')}
+<<<<<<< HEAD
                     className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white"
                   >
                     <Facebook size={16} />
+=======
+                    className="flex items-center justify-center gap-3 py-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-medium transition-all transform hover:scale-105"
+                  >
+                    <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center">
+                      <Facebook size={16} className="text-blue-600" />
+                    </div>
+>>>>>>> c919ab7 (updates new)
                     <span>Facebook</span>
                   </Button>
                   
                   <Button
                     onClick={() => handleSocialShare('twitter')}
+<<<<<<< HEAD
                     className="flex items-center justify-center gap-2 bg-sky-500 hover:bg-sky-600 text-white"
                   >
                     <Twitter size={16} />
                     <span>Twitter</span>
+=======
+                    className="flex items-center justify-center gap-3 py-4 rounded-xl bg-black hover:bg-gray-900 text-white font-medium transition-all transform hover:scale-105"
+                  >
+                    <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" className="text-black">
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                      </svg>
+                    </div>
+                    <span>X (Twitter)</span>
+>>>>>>> c919ab7 (updates new)
                   </Button>
                   
                   <Button
                     onClick={() => handleSocialShare('instagram')}
+<<<<<<< HEAD
                     className="flex items-center justify-center gap-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white"
                   >
                     <span className="text-lg">📷</span>
+=======
+                    className="flex items-center justify-center gap-3 py-4 rounded-xl bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 hover:from-purple-600 hover:via-pink-600 hover:to-orange-600 text-white font-medium transition-all transform hover:scale-105"
+                  >
+                    <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" className="text-pink-500">
+                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                      </svg>
+                    </div>
+>>>>>>> c919ab7 (updates new)
                     <span>Instagram</span>
                   </Button>
                 </div>
@@ -891,10 +1287,19 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
                 {/* Copy Link */}
                 <Button
                   onClick={handleCopyLink}
+<<<<<<< HEAD
                   className="w-full flex items-center justify-center gap-2"
                   variant="outline"
                 >
                   <Copy size={16} />
+=======
+                  className="w-full flex items-center justify-center gap-3 py-4 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium transition-all"
+                  variant="outline"
+                >
+                  <div className="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center">
+                    <Copy size={18} className="text-white" />
+                  </div>
+>>>>>>> c919ab7 (updates new)
                   <span>Copy Link</span>
                 </Button>
               </div>
@@ -962,6 +1367,12 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
         </Collapsible>
       </div>
 
+<<<<<<< HEAD
+=======
+      {/* Auth Modal */}
+      <AuthModal isOpen={isOpen} onClose={closeModal} defaultTab={defaultTab} />
+
+>>>>>>> c919ab7 (updates new)
       {/* Delete Confirmation Dialog */}
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
         <AlertDialogContent>

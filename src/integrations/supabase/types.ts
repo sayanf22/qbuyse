@@ -147,6 +147,10 @@ export type Database = {
       }
       posts: {
         Row: {
+<<<<<<< HEAD
+=======
+          category: string
+>>>>>>> c919ab7 (updates new)
           created_at: string | null
           description: string | null
           id: string
@@ -158,6 +162,10 @@ export type Database = {
           user_id: string
         }
         Insert: {
+<<<<<<< HEAD
+=======
+          category?: string
+>>>>>>> c919ab7 (updates new)
           created_at?: string | null
           description?: string | null
           id?: string
@@ -169,6 +177,10 @@ export type Database = {
           user_id: string
         }
         Update: {
+<<<<<<< HEAD
+=======
+          category?: string
+>>>>>>> c919ab7 (updates new)
           created_at?: string | null
           description?: string | null
           id?: string
@@ -217,7 +229,18 @@ export type Database = {
     }
     Functions: {
       get_posts_with_profiles: {
+<<<<<<< HEAD
         Args: { p_filter?: string; p_state?: string; p_limit?: number }
+=======
+        Args:
+          | {
+              p_filter?: string
+              p_state?: string
+              p_category?: string
+              p_limit?: number
+            }
+          | { p_filter?: string; p_state?: string; p_limit?: number }
+>>>>>>> c919ab7 (updates new)
         Returns: {
           id: string
           title: string
@@ -225,6 +248,10 @@ export type Database = {
           price: number
           type: string
           state: string
+<<<<<<< HEAD
+=======
+          category: string
+>>>>>>> c919ab7 (updates new)
           user_id: string
           images: string[]
           created_at: string
