@@ -1,202 +1,59 @@
-<!DOCTYPE html>
-<html lang="en-IN">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>Qbuyse - Buy & Sell in India | भारत का लोकल मार्केटप्लेस</title>
-  <link rel="canonical" href="https://www.qbuyse.online/" />
-  <meta name="description" content="Buy & sell used mobiles, laptops, bikes, cars, furniture, electronics & more in India. City & state-wise listings, fast search, secure chat." />
-  <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" />
-  <meta name="theme-color" content="#0b57d0" />
-  <link rel="preload" as="style" href="/assets/critical.css" />
-  <link rel="stylesheet" href="/assets/critical.css" media="all" />
-  <link rel="stylesheet" href="/assets/app.css" media="print" onload="this.media='all'">
-  <link rel="icon" href="/icons/icon-192.png" sizes="192x192" type="image/png" />
-  <link rel="manifest" href="/manifest.webmanifest" />
+ <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Qbuyse - Your Local Marketplace | Buy & Sell Online | Best Deals in India</title>
+    <meta name="description" content="Qbuyse - India's leading local marketplace. Buy and sell products online with ease. Find great deals on electronics, laptops, mobiles, furniture & more. State-wise marketplace connecting buyers and sellers across India." />
+    <meta name="keywords" content="marketplace, buy sell online, local marketplace, classified ads, OLX alternative, electronics, laptops, mobiles, furniture, india marketplace, state wise marketplace, second hand, used items, online shopping" />
+    <meta name="author" content="Qbuyse" />
+    <meta name="robots" content="index, follow" />
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://www.qbuyse.online" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.qbuyse.online" />
+    <meta property="og:title" content="Qbuyse - Your Local Marketplace | Buy & Sell Online" />
+    <meta property="og:description" content="India's leading local marketplace. Buy and sell products online with ease. Find great deals on electronics, laptops, mobiles, furniture & more." />
+    <meta property="og:image" content="https://www.qbuyse.online/og-image.png" />
+    <meta property="og:site_name" content="Qbuyse" />
+    <meta property="og:locale" content="en_IN" />
 
-  <!-- Structured Data: keep neutral re: payments (do not claim support) -->
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"WebSite",
-    "name":"Qbuyse",
-    "url":"https://www.qbuyse.online",
-    "potentialAction":{
-      "@type":"SearchAction",
-      "target":"https://www.qbuyse.online/search?q={search_term_string}",
-      "query-input":"required name=search_term_string"
-    },
-    "inLanguage":["en-IN","hi-IN"]
-  }
-  </script>
-
-  <!-- Organization (no payment claim) -->
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"Organization",
-    "name":"Qbuyse",
-    "url":"https://www.qbuyse.online",
-    "logo":"https://www.qbuyse.online/logo.png",
-    "contactPoint":[
-      {
-        "@type":"ContactPoint",
-        "contactType":"customer service",
-        "telephone":"+91-0000000000",
-        "areaServed":"IN",
-        "availableLanguage":["en","hi"]
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://www.qbuyse.online" />
+    <meta name="twitter:title" content="Qbuyse - Your Local Marketplace | Buy & Sell Online" />
+    <meta name="twitter:description" content="India's leading local marketplace. Buy and sell products online with ease. Find great deals on electronics, laptops, mobiles, furniture & more." />
+    <meta name="twitter:image" content="https://www.qbuyse.online/twitter-image.png" />
+    
+    <!-- Additional SEO Meta Tags -->
+    <meta name="geo.region" content="IN" />
+    <meta name="geo.country" content="India" />
+    <meta name="language" content="English" />
+    <meta name="coverage" content="Worldwide" />
+    <meta name="distribution" content="Global" />
+    <meta name="rating" content="General" />
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Qbuyse",
+      "url": "https://www.qbuyse.online",
+      "description": "India's leading local marketplace for buying and selling products online",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://www.qbuyse.online/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
       }
-    ]
-  }
-  </script>
-
-  <!-- Top categories for rich context -->
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"ItemList",
-    "name":"Top Categories",
-    "itemListElement":[
-      {"@type":"ListItem","position":1,"name":"Mobiles","url":"https://www.qbuyse.online/c/mobiles"},
-      {"@type":"ListItem","position":2,"name":"Electronics","url":"https://www.qbuyse.online/c/electronics"},
-      {"@type":"ListItem","position":3,"name":"Vehicles","url":"https://www.qbuyse.online/c/vehicles"},
-      {"@type":"ListItem","position":4,"name":"Furniture","url":"https://www.qbuyse.online/c/furniture"},
-      {"@type":"ListItem","position":5,"name":"Real Estate","url":"https://www.qbuyse.online/c/real-estate"}
-    ]
-  }
-  </script>
-
-  <style>
-    /* Compact header for better LCP */
-    .site-header{display:flex;align-items:center;gap:12px;padding:8px 12px;position:sticky;top:0;background:#fff;border-bottom:1px solid #eee;z-index:50}
-    .logo img{width:96px;height:auto}
-    .search-bar{display:flex;gap:8px;flex:1}
-    .search-bar input{flex:1;min-width:0}
-    .nav{display:flex;gap:10px}
-    .nav a{white-space:nowrap}
-    .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:16px;align-items:center;padding:12px}
-    .hero h1{margin:0;font-size:1.5rem;line-height:1.2}
-    .cta{display:inline-block;padding:10px 14px;background:#0b57d0;color:#fff;border-radius:6px;text-decoration:none}
-    .city-grid,.cat-grid,.listing-grid,.state-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
-    .trust ul{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;padding-left:18px}
-    img{max-width:100%;height:auto}
-    /* Pin featured listings on category pages (class-based) */
-    .listing-grid .featured{order:-1}
-    /* Hide any payment UI mentions if present in legacy CSS classes */
-    .ui-payment,.text-payment,.badge-payment{display:none !important}
-  </style>
-</head>
-<body>
-  <header class="site-header" role="banner">
-    <a href="/" class="logo" aria-label="Qbuyse Home">
-      <img src="/logo.svg" alt="Qbuyse" width="96" height="24" decoding="async" />
-    </a>
-    <form action="/search" method="get" role="search" class="search-bar" aria-label="Search Qbuyse">
-      <input name="q" type="search" placeholder="Search mobiles, bikes, laptops..." autocomplete="on" />
-      <input name="city" type="text" placeholder="City or PIN" inputmode="numeric" />
-      <button type="submit">Search</button>
-    </form>
-    <nav aria-label="Top navigation">
-      <ul class="nav">
-        <li><a href="/post">Post Free Ad</a></li>
-        <li><a href="/c/mobiles">Mobiles</a></li>
-        <li><a href="/c/vehicles">Vehicles</a></li>
-        <li><a href="/c/electronics">Electronics</a></li>
-        <li><a href="/c/furniture">Furniture</a></li>
-      </ul>
-    </nav>
-  </header>
-
-  <section class="hero" aria-label="India local marketplace">
-    <div>
-      <h1>Buy & Sell Across India | भारत का भरोसेमंद मार्केटप्लेस</h1>
-      <p>Post free ads, discover great deals near you. Fast search, secure chat, city & state-wise listings.</p>
-      <a class="cta" href="/post">Post Free Ad</a>
-    </div>
-    <img src="/assets/hero.webp" alt="Local deals across Indian cities" width="960" height="480" loading="eager" fetchpriority="high" decoding="async" />
-  </section>
-
-  <section class="categories" aria-label="Browse categories">
-    <h2>Top Categories</h2>
-    <ul class="cat-grid">
-      <li><a href="/c/mobiles" title="Used Mobiles in India">Used Mobiles</a></li>
-      <li><a href="/c/laptops" title="Second Hand Laptops">Laptops</a></li>
-      <li><a href="/c/vehicles" title="Used Bikes and Cars">Bikes & Cars</a></li>
-      <li><a href="/c/furniture" title="Furniture for Sale">Furniture</a></li>
-      <li><a href="/c/electronics" title="Electronics and Appliances">Electronics</a></li>
-      <li><a href="/c/real-estate" title="Rent and Sale Properties">Real Estate</a></li>
-    </ul>
-  </section>
-
-  <section class="cities" aria-label="Popular cities">
-    <h2>Popular Cities</h2>
-    <ul class="city-grid">
-      <li><a href="/in/delhi">Delhi</a></li>
-      <li><a href="/in/mumbai">Mumbai</a></li>
-      <li><a href="/in/bengaluru">Bengaluru</a></li>
-      <li><a href="/in/hyderabad">Hyderabad</a></li>
-      <li><a href="/in/chennai">Chennai</a></li>
-      <li><a href="/in/kolkata">Kolkata</a></li>
-      <li><a href="/in/pune">Pune</a></li>
-      <li><a href="/in/ahmedabad">Ahmedabad</a></li>
-    </ul>
-  </section>
-
-  <section class="trust" aria-label="Why Qbuyse">
-    <h2>Why Qbuyse</h2>
-    <ul>
-      <li>Free listings, no hidden fees</li>
-      <li>Secure in-app chat and verified profiles</li>
-      <li>City and PIN-based discovery</li>
-      <li>English + हिंदी support</li>
-    </ul>
-  </section>
-
-  <section class="listings" aria-label="Latest listings">
-    <h2>Latest Listings Near You</h2>
-    <ul class="listing-grid">
-      <li class="featured">
-        <article itemscope itemtype="https://schema.org/Product">
-          <a href="/l/iphone-13-delhi" itemprop="url">
-            <img src="/assets/placeholder.webp" alt="iPhone 13" width="240" height="180" loading="lazy" decoding="async" />
-            <h3 itemprop="name">iPhone 13 - Excellent</h3>
-            <p><span itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-              <span itemprop="priceCurrency" content="INR">₹</span><span itemprop="price" content="38999">38,999</span>
-            </span> • Delhi</p>
-            <meta itemprop="category" content="Mobiles" />
-          </a>
-        </article>
-      </li>
-      <!-- More items -->
-    </ul>
-    <a class="view-all" href="/latest">View all</a>
-  </section>
-
-  <footer class="site-footer" role="contentinfo">
-    <nav aria-label="Footer">
-      <ul class="footer-links">
-        <li><a href="/about">About</a></li>
-        <li><a href="/safety">Safety Tips</a></li>
-        <li><a href="/terms">Terms</a></li>
-        <li><a href="/privacy">Privacy</a></li>
-        <li><a href="/contact">Contact</a></li>
-        <li><a href="/help">Help</a></li>
-      </ul>
-    </nav>
-    <p>© <span id="y"></span> Qbuyse. All rights reserved. Made for India.</p>
-  </footer>
-
-  <script>
-    document.getElementById('y').textContent = new Date().getFullYear();
-    // Hide any legacy payment text if it exists in DOM (safety)
-    document.addEventListener('DOMContentLoaded', () => {
-      const sel = ['[data-ui="payment"]','.ui-payment','.text-payment','.badge-payment'];
-      sel.forEach(s => document.querySelectorAll(s).forEach(el => el.remove()));
-    });
-    if ('serviceWorker' in navigator) {
-      addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(()=>{}));
     }
-  </script>
-  <script src="/src/main.tsx" type="module" defer></script>
-</body>
-</html>
+    </script>
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
