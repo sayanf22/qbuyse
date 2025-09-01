@@ -341,7 +341,7 @@ const ProfilePage = () => {
           {/* Profile Header */}
           <div className="flex flex-col items-center mb-8">
             <div className="relative mb-4 group">
-              <Avatar className="w-32 h-32 border-4 border-white shadow-lg">
+              <Avatar className="w-32 h-32 border-4 border-border shadow-lg ring-2 ring-background">
                 {profile?.profile_img ? (
                   <AvatarImage 
                     src={profile.profile_img} 
@@ -349,7 +349,7 @@ const ProfilePage = () => {
                     className="object-cover"
                   />
                 ) : (
-                  <AvatarFallback className="bg-gradient-to-br from-orange-200 to-orange-300 text-2xl font-bold text-gray-700">
+                  <AvatarFallback className="bg-gradient-to-br from-orange-200 to-orange-300 dark:from-orange-600 dark:to-orange-700 text-2xl font-bold text-orange-800 dark:text-orange-100">
                     {getInitials(profile?.full_name || 'User')}
                   </AvatarFallback>
                 )}
@@ -383,7 +383,7 @@ const ProfilePage = () => {
 
             {uploading && (
               <div className="mb-2">
-                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-gray-900"></div>
+                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
               </div>
             )}
             

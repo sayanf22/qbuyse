@@ -137,7 +137,7 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
                 .select("full_name, username, profile_img")
                 .eq("id", discussion.user_id)
                 .single();
-              
+
               return {
                 ...discussion,
                 profiles: profile
@@ -188,37 +188,37 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
       const mentionUsernames: string[] = [];
       const mentionUserIds: string[] = [];
       let match;
-      
+
       while ((match = mentionRegex.exec(comment)) !== null) {
         mentionUsernames.push(match[1]);
       }
-      
+
       // Validate mentioned usernames exist and get their user IDs
       if (mentionUsernames.length > 0) {
         const { data: mentionedUsers, error: mentionError } = await supabase
           .from("profiles")
           .select("id, username")
           .in("username", mentionUsernames);
-        
+
         if (mentionError) {
           console.error("Error validating mentions:", mentionError);
           throw new Error("Failed to validate mentioned users");
         }
-        
+
         // Check if all mentioned usernames exist
         const validUsernames = mentionedUsers?.map(u => u.username) || [];
         const invalidUsernames = mentionUsernames.filter(username => !validUsernames.includes(username));
-        
+
         if (invalidUsernames.length > 0) {
           throw new Error(`These users don't exist: @${invalidUsernames.join(', @')}`);
         }
-        
+
         // Store user IDs for mentions
         mentionUserIds.push(...(mentionedUsers?.map(u => u.id) || []));
       }
 
       console.log("Adding comment:", comment, "for post:", post.id, "by user:", currentUser.id);
-      
+
       const { data, error } = await supabase
         .from("discussions")
         .insert({
@@ -234,7 +234,7 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
         console.error("Error adding comment:", error);
         throw error;
       }
-      
+
       console.log("Comment added successfully:", data);
       return data;
     },
@@ -275,19 +275,19 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
       console.log("Cannot delete - not owner");
       return;
     }
-    
+
     setIsDeleting(true);
     try {
       console.log("Deleting post and all related data:", post.id);
-      
+
       // Delete all related data in sequence to ensure proper cleanup
-      
+
       // 1. Delete all notifications related to this post
       const { error: notificationsError } = await supabase
         .from("notifications")
         .delete()
         .eq("post_id", post.id);
-      
+
       if (notificationsError) {
         console.error("Error deleting notifications:", notificationsError);
         throw notificationsError;
@@ -298,7 +298,7 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
         .from("discussions")
         .delete()
         .eq("post_id", post.id);
-      
+
       if (discussionsError) {
         console.error("Error deleting discussions:", discussionsError);
         throw discussionsError;
@@ -309,7 +309,7 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
         .from("chats")
         .delete()
         .eq("post_id", post.id);
-      
+
       if (chatsError) {
         console.error("Error deleting chats:", chatsError);
         throw chatsError;
@@ -349,9 +349,9 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
 
   const handleAddComment = () => {
     if (newComment.trim()) {
-      addCommentMutation.mutate({ 
-        comment: newComment, 
-        parentCommentId: replyingTo || undefined 
+      addCommentMutation.mutate({
+        comment: newComment,
+        parentCommentId: replyingTo || undefined
       });
     }
   };
@@ -363,7 +363,7 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
 
   const deleteComment = async (commentId: string) => {
     if (!currentUser) return;
-    
+
     try {
       const { error } = await supabase
         .from("discussions")
@@ -413,9 +413,9 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
   const handleSocialShare = (platform: string) => {
     const url = getCurrentUrl();
     const text = `Check out this ${post.type.toLowerCase()} post: ${post.title}`;
-    
+
     let shareUrl = '';
-    
+
     switch (platform) {
       case 'facebook':
         shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
@@ -434,7 +434,7 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
         });
         return;
     }
-    
+
     if (shareUrl) {
       window.open(shareUrl, '_blank', 'width=600,height=400');
       setShowShareDialog(false);
@@ -524,8 +524,8 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
 
     return (
       <div key={discussion.id} className={`flex gap-3 ${isReply ? 'ml-8 mt-2' : ''}`}>
-        <div 
-          className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center flex-shrink-0 cursor-pointer hover:bg-teal-200 transition-colors"
+        <div
+          className="w-8 h-8 bg-gradient-to-br from-teal-100 to-teal-200 dark:from-teal-800 dark:to-teal-700 rounded-full flex items-center justify-center flex-shrink-0 cursor-pointer hover:scale-105 transition-all duration-200 ring-2 ring-transparent hover:ring-teal-200 dark:hover:ring-teal-600"
           onClick={() => navigate(`/user/${discussion.user_id}`)}
         >
           {discussion.profiles?.profile_img ? (
@@ -535,27 +535,30 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
               className="w-full h-full rounded-full object-cover"
             />
           ) : (
-              <span className="text-sm font-medium text-teal-700">
-                {discussion.profiles?.full_name?.[0] || 'U'}
-              </span>
-            )}
-          </div>
+            <span className="text-sm font-bold text-teal-700 dark:text-teal-200">
+              {discussion.profiles?.full_name?.[0] || 'U'}
+            </span>
+          )}
+        </div>
         <div className="flex-1">
           <div className="bg-muted rounded-lg p-3 relative">
             <div className="flex items-start justify-between">
               <div className="flex-1">
-                <p 
-                  className="text-sm font-medium text-foreground mb-1 cursor-pointer hover:text-primary transition-colors"
+                <p
+                  className="text-sm font-semibold text-foreground mb-1 cursor-pointer hover:text-primary transition-colors hover:underline"
                   onClick={() => navigate(`/user/${discussion.user_id}`)}
                 >
                   {discussion.profiles?.full_name || 'Anonymous'}
                 </p>
                 {discussion.profiles?.username && (
-                  <p className="text-xs text-muted-foreground mb-2">
+                  <p
+                    className="text-xs text-muted-foreground mb-2 cursor-pointer hover:text-primary transition-colors"
+                    onClick={() => navigate(`/user/${discussion.user_id}`)}
+                  >
                     @{discussion.profiles.username}
                   </p>
                 )}
-                <p 
+                <p
                   className="text-sm text-foreground"
                   dangerouslySetInnerHTML={{ __html: processedComment }}
                 />
@@ -624,11 +627,11 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
             // Single image - no carousel needed
             <Dialog>
               <DialogTrigger asChild>
-                <div className="relative cursor-pointer">
+                <div className="relative cursor-pointer aspect-video overflow-hidden">
                   <img
                     src={post.images[0]}
                     alt={post.title}
-                    className="w-full h-48 object-cover hover:opacity-95 transition-opacity"
+                    className="w-full h-full object-cover hover:opacity-95 transition-opacity"
                     onError={(e) => {
                       e.currentTarget.src = "/placeholder.svg";
                     }}
@@ -659,11 +662,11 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
                   <CarouselItem key={index}>
                     <Dialog>
                       <DialogTrigger asChild>
-                        <div className="relative cursor-pointer">
+                        <div className="relative cursor-pointer aspect-video overflow-hidden">
                           <img
                             src={image}
                             alt={`${post.title} - Image ${index + 1}`}
-                            className="w-full h-48 object-cover hover:opacity-95 transition-opacity"
+                            className="w-full h-full object-cover hover:opacity-95 transition-opacity"
                             onError={(e) => {
                               e.currentTarget.src = "/placeholder.svg";
                             }}
@@ -691,7 +694,7 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
               </CarouselContent>
               <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2 z-10 h-8 w-8 bg-background/90 hover:bg-background border-0 shadow-lg" />
               <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2 z-10 h-8 w-8 bg-background/90 hover:bg-background border-0 shadow-lg" />
-              
+
               {/* Image indicator dots */}
               <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1 z-10">
                 {post.images.map((_, index) => (
@@ -703,14 +706,14 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
               </div>
             </Carousel>
           )}
-          
+
           {/* Type badge */}
           <div className="absolute top-3 right-3 z-20">
             <span className={`px-3 py-1 rounded-full text-xs font-medium ${getTypeColor(post.type)}`}>
               {post.type === 'SELL' ? 'SELL' : 'WANT'}
             </span>
           </div>
-          
+
           {/* Images count badge for multiple images */}
           {post.images.length > 1 && (
             <div className="absolute top-3 right-20 z-20">
@@ -719,7 +722,7 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
               </span>
             </div>
           )}
-          
+
           {/* 3-dot menu for post owner */}
           {(isOwner || currentUser?.id === post.user_id) && (
             <div className="absolute top-3 left-3 z-[20]">
@@ -734,11 +737,11 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
                       e.stopPropagation();
                     }}
                   >
-                    <MoreVertical size={18} className="text-gray-700" />
+                    <MoreVertical size={18} className="text-foreground" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent 
-                  align="start" 
+                <DropdownMenuContent
+                  align="start"
                   className="w-36 z-[50] bg-popover border shadow-lg"
                   side="bottom"
                   sideOffset={5}
@@ -796,9 +799,9 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
                   <Button size="sm" onClick={updatePost} className="bg-green-600 hover:bg-green-700">
                     Save
                   </Button>
-                  <Button 
-                    size="sm" 
-                    variant="outline" 
+                  <Button
+                    size="sm"
+                    variant="outline"
                     onClick={() => {
                       setIsEditing(false);
                       setEditTitle(post.title);
@@ -839,8 +842,8 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
                   <MoreVertical size={18} />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent 
-                align="end" 
+              <DropdownMenuContent
+                align="end"
                 className="w-36 z-[50] bg-popover border shadow-lg"
                 side="bottom"
                 sideOffset={5}
@@ -875,11 +878,11 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
 
         {/* Profile Information - Clickable */}
         {(post.profile_full_name || post.profile_username) && (
-          <div 
-            className="flex items-center gap-2 mb-3 px-1 cursor-pointer hover:bg-accent rounded-lg p-2 -mx-2 transition-colors group"
+          <div
+            className="flex items-center gap-3 mb-3 cursor-pointer hover:bg-accent/50 rounded-lg p-3 -mx-1 transition-all duration-200 group border border-transparent hover:border-border/50"
             onClick={() => navigate(`/user/${post.user_id}`)}
           >
-            <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center flex-shrink-0 group-hover:bg-teal-200 transition-colors">
+            <div className="w-10 h-10 bg-gradient-to-br from-teal-100 to-teal-200 dark:from-teal-800 dark:to-teal-700 rounded-full flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-all duration-200 ring-2 ring-transparent group-hover:ring-teal-200 dark:group-hover:ring-teal-600">
               {post.profile_img ? (
                 <img
                   src={post.profile_img}
@@ -887,23 +890,26 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
                   className="w-full h-full rounded-full object-cover"
                 />
               ) : (
-                <span className="text-sm font-medium text-teal-700">
+                <span className="text-sm font-bold text-teal-700 dark:text-teal-200">
                   {post.profile_full_name?.[0] || post.profile_username?.[0] || 'U'}
                 </span>
               )}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-foreground truncate group-hover:text-primary transition-colors">
+              <p className="text-sm font-semibold text-foreground truncate group-hover:text-primary transition-colors">
                 {post.profile_full_name || 'Anonymous'}
               </p>
               {post.profile_username && (
-                <p className="text-xs text-muted-foreground truncate group-hover:text-primary transition-colors">
+                <p className="text-xs text-muted-foreground truncate group-hover:text-primary/80 transition-colors">
                   @{post.profile_username}
                 </p>
               )}
             </div>
-            <div className="text-gray-400 group-hover:text-teal-500 transition-colors">
-              <span className="text-xs">View Profile</span>
+            <div className="text-muted-foreground group-hover:text-primary transition-colors flex items-center gap-1">
+              <span className="text-xs font-medium">View Profile</span>
+              <svg className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
             </div>
           </div>
         )}
@@ -954,7 +960,7 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
                     onClick={handleDiscussion}
                     className="flex items-center gap-1 rounded-full px-3 py-1.5 text-xs hover:bg-accent transition-colors border-border"
                   >
-                    
+
                     <MessageCircle size={14} />
                     <span>Discussion</span>
                   </Button>
@@ -992,7 +998,7 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
             <DialogContent className="sm:max-w-md">
               <DialogHeader className="text-center pb-4">
                 <DialogTitle className="text-xl font-semibold">Share this post</DialogTitle>
-                <DialogDescription className="text-gray-600">
+                <DialogDescription className="text-muted-foreground">
                   Choose how you'd like to share this post
                 </DialogDescription>
               </DialogHeader>
@@ -1001,7 +1007,7 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
                 {navigator.share && (
                   <Button
                     onClick={handleNativeShare}
-                    className="w-full flex items-center justify-center gap-3 py-4 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium transition-all"
+                    className="w-full flex items-center justify-center gap-3 py-4 rounded-xl bg-muted hover:bg-accent text-foreground font-medium transition-all"
                     variant="outline"
                   >
                     <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
@@ -1010,7 +1016,7 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
                     <span>Share via device</span>
                   </Button>
                 )}
-                
+
                 {/* Social Media Options */}
                 <div className="grid grid-cols-2 gap-4">
                   <Button
@@ -1022,7 +1028,7 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
                     </div>
                     <span>WhatsApp</span>
                   </Button>
-                  
+
                   <Button
                     onClick={() => handleSocialShare('facebook')}
                     className="flex items-center justify-center gap-3 py-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-medium transition-all transform hover:scale-105"
@@ -1032,36 +1038,36 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
                     </div>
                     <span>Facebook</span>
                   </Button>
-                  
+
                   <Button
                     onClick={() => handleSocialShare('twitter')}
                     className="flex items-center justify-center gap-3 py-4 rounded-xl bg-black hover:bg-gray-900 text-white font-medium transition-all transform hover:scale-105"
                   >
                     <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center">
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" className="text-black">
-                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                       </svg>
                     </div>
                     <span>X (Twitter)</span>
                   </Button>
-                  
+
                   <Button
                     onClick={() => handleSocialShare('instagram')}
                     className="flex items-center justify-center gap-3 py-4 rounded-xl bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 hover:from-purple-600 hover:via-pink-600 hover:to-orange-600 text-white font-medium transition-all transform hover:scale-105"
                   >
                     <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center">
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" className="text-pink-500">
-                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
                       </svg>
                     </div>
                     <span>Instagram</span>
                   </Button>
                 </div>
-                
+
                 {/* Copy Link */}
                 <Button
                   onClick={handleCopyLink}
-                  className="w-full flex items-center justify-center gap-3 py-4 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium transition-all"
+                  className="w-full flex items-center justify-center gap-3 py-4 rounded-xl bg-muted hover:bg-accent text-foreground font-medium transition-all"
                   variant="outline"
                 >
                   <div className="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center">
@@ -1088,14 +1094,14 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
                   {discussions.map((discussion) => renderComment(discussion))}
                 </div>
               ) : (
-                <p className="text-gray-500 text-sm text-center py-4">No comments yet. Be the first to comment!</p>
+                <p className="text-muted-foreground text-sm text-center py-4">No comments yet. Be the first to comment!</p>
               )}
 
               {/* Add Comment */}
               {currentUser && (
                 <div className="space-y-2">
                   {replyingTo && (
-                    <div className="flex items-center gap-2 text-sm text-gray-500">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
                       <span>Replying to comment</span>
                       <Button
                         variant="ghost"

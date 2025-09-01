@@ -137,21 +137,21 @@ const UserProfilePage = () => {
                   className="object-cover"
                 />
               ) : (
-                <AvatarFallback className="bg-gradient-to-br from-orange-200 to-orange-300 text-2xl font-bold text-gray-700">
+                <AvatarFallback className="bg-gradient-to-br from-orange-200 to-orange-300 dark:from-orange-600 dark:to-orange-700 text-2xl font-bold text-orange-800 dark:text-orange-100">
                   {getInitials(profile.full_name || 'User')}
                 </AvatarFallback>
               )}
             </Avatar>
             
-            <h1 className="text-2xl font-bold text-gray-900 mb-1">
+            <h1 className="text-2xl font-bold text-foreground mb-1">
               {profile.full_name || 'User'}
             </h1>
             {profile.username && (
-              <p className="text-gray-500 text-sm mb-1">
+              <p className="text-muted-foreground text-sm mb-1">
                 @{profile.username}
               </p>
             )}
-            <p className="text-gray-500 text-sm mb-4">
+            <p className="text-muted-foreground text-sm mb-4">
               {profile.state || 'Location not set'}
             </p>
 
@@ -167,7 +167,7 @@ const UserProfilePage = () => {
 
           {/* User's Posts */}
           <div>
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">
+            <h2 className="text-lg font-semibold text-foreground mb-4">
               Listings ({userPosts?.length || 0})
             </h2>
             
@@ -187,8 +187,8 @@ const UserProfilePage = () => {
               </div>
             ) : (
               <div className="text-center py-12">
-                <p className="text-gray-500 text-lg">No listings yet</p>
-                <p className="text-gray-400 text-sm">This user hasn't posted anything yet.</p>
+                <p className="text-muted-foreground text-lg">No listings yet</p>
+                <p className="text-muted-foreground/70 text-sm">This user hasn't posted anything yet.</p>
               </div>
             )}
           </div>

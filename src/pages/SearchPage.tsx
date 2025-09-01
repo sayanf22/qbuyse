@@ -226,7 +226,7 @@ const SearchPage = () => {
               placeholder="Search for items, people, or everything..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 pr-4 py-3 rounded-full border-border focus:border-teal-500 focus:ring-teal-500"
+              className="pl-10 pr-4 py-3 rounded-full border-border focus:border-primary focus:ring-primary/20 bg-background text-foreground placeholder:text-muted-foreground"
             />
           </div>
 
@@ -279,7 +279,7 @@ const SearchPage = () => {
               <Button
                 variant="ghost"
                 onClick={clearFilters}
-                className="flex items-center space-x-2 text-teal-600"
+                className="flex items-center space-x-2 text-primary hover:text-primary/80"
               >
                 <X size={16} />
                 <span>Clear</span>
@@ -356,7 +356,10 @@ const SearchPage = () => {
       <div className="px-4 py-4">
         {(isLoading || peopleLoading) ? (
           <div className="flex justify-center py-8">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-500"></div>
+            <div className="relative">
+              <div className="animate-spin rounded-full h-8 w-8 border-2 border-primary/20 border-t-primary"></div>
+              <div className="absolute inset-0 animate-pulse rounded-full h-8 w-8 border-2 border-primary/10"></div>
+            </div>
           </div>
         ) : (
           <div className="space-y-6">
@@ -364,8 +367,8 @@ const SearchPage = () => {
             {(searchType === "people" || searchType === "all") && people && people.length > 0 && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold text-gray-900">People</h3>
-                  <p className="text-gray-600 text-sm">
+                  <h3 className="text-lg font-semibold text-foreground">People</h3>
+                  <p className="text-muted-foreground text-sm">
                     {people.length} result{people.length !== 1 ? 's' : ''}
                   </p>
                 </div>
@@ -373,12 +376,12 @@ const SearchPage = () => {
                   {people.map((person, index) => (
                     <div
                       key={person.id}
-                      className="bg-white rounded-lg border border-gray-200 p-4 hover:shadow-md transition-shadow animate-fade-in cursor-pointer"
+                      className="bg-card rounded-lg border border-border p-4 hover:shadow-md transition-shadow animate-fade-in cursor-pointer hover:bg-card/80"
                       style={{ animationDelay: `${index * 0.1}s` }}
                       onClick={() => navigate(`/user/${person.id}`)}
                     >
                       <div className="flex items-center space-x-3">
-                        <div className="w-12 h-12 bg-gradient-to-br from-teal-200 to-teal-300 rounded-full flex items-center justify-center">
+                        <div className="w-12 h-12 bg-gradient-to-br from-primary/20 to-primary/30 rounded-full flex items-center justify-center">
                           {person.profile_img ? (
                             <img 
                               src={person.profile_img} 
@@ -386,15 +389,15 @@ const SearchPage = () => {
                               className="w-12 h-12 rounded-full object-cover"
                             />
                           ) : (
-                            <span className="text-lg font-bold text-gray-700">
+                            <span className="text-lg font-bold text-primary">
                               {person.full_name?.split(' ').map(n => n[0]).join('').toUpperCase() || 'U'}
                             </span>
                           )}
                         </div>
                         <div className="flex-1">
-                          <h4 className="font-semibold text-gray-900">{person.full_name || 'Unknown User'}</h4>
-                          <p className="text-gray-500 text-sm">@{person.username}</p>
-                          <p className="text-gray-400 text-xs">{person.state}</p>
+                          <h4 className="font-semibold text-foreground">{person.full_name || 'Unknown User'}</h4>
+                          <p className="text-muted-foreground text-sm">@{person.username}</p>
+                          <p className="text-muted-foreground/70 text-xs">{person.state}</p>
                         </div>
                       </div>
                     </div>
@@ -408,15 +411,15 @@ const SearchPage = () => {
               <div className="space-y-4">
                 {(searchType === "all" && people && people.length > 0) && (
                   <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-semibold text-gray-900">Items</h3>
-                    <p className="text-gray-600 text-sm">
+                    <h3 className="text-lg font-semibold text-foreground">Items</h3>
+                    <p className="text-muted-foreground text-sm">
                       {posts.length} result{posts.length !== 1 ? 's' : ''}
                     </p>
                   </div>
                 )}
                 {searchType === "items" && (
                   <div className="flex items-center justify-between">
-                    <p className="text-gray-600 text-sm">
+                    <p className="text-muted-foreground text-sm">
                       Found {posts.length} result{posts.length !== 1 ? 's' : ''}
                       {searchQuery && ` for "${searchQuery}"`}
                     </p>
@@ -425,7 +428,7 @@ const SearchPage = () => {
                         variant="ghost"
                         size="sm"
                         onClick={() => setSearchQuery("")}
-                        className="text-teal-600"
+                        className="text-primary hover:text-primary/80"
                       >
                         Clear search
                       </Button>
@@ -451,11 +454,11 @@ const SearchPage = () => {
               (searchType === "items" && (!posts || posts.length === 0)) ||
               (searchType === "all" && (!posts || posts.length === 0) && (!people || people.length === 0))) && (
               <div className="text-center py-12 animate-fade-in">
-                <Search size={48} className="mx-auto text-gray-300 mb-4" />
-                <p className="text-gray-500 text-lg mb-2">
+                <Search size={48} className="mx-auto text-muted-foreground/50 mb-4" />
+                <p className="text-muted-foreground text-lg mb-2">
                   {searchQuery ? `No results found for "${searchQuery}"` : "No results found"}
                 </p>
-                <p className="text-gray-400">Try adjusting your search or filters</p>
+                <p className="text-muted-foreground/70">Try adjusting your search or filters</p>
               </div>
             )}
           </div>

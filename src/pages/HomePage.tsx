@@ -283,15 +283,12 @@ const HomePage = () => {
               <span className="text-xs text-muted-foreground scroll-hint">{t('scroll_hint')}</span>
             </div>
             <div className="relative">
-              <div className="absolute left-0 top-0 bottom-3 w-6 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none"></div>
-              <div className="absolute right-0 top-0 bottom-3 w-6 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none"></div>
-              
               <div className="flex space-x-3 overflow-x-auto pb-3 category-scroll">
                 <button
                   onClick={() => setSelectedCategory("ALL")}
                   className={
                     selectedCategory === "ALL"
-                      ? "flex-shrink-0 px-5 py-3 rounded-xl text-sm font-medium transition-all flex items-center space-x-2.5 min-w-fit bg-primary text-primary-foreground shadow-md"
+                      ? "flex-shrink-0 px-5 py-3 rounded-xl text-sm font-medium transition-all flex items-center space-x-2.5 min-w-fit bg-primary text-primary-foreground"
                       : "flex-shrink-0 px-5 py-3 rounded-xl text-sm font-medium transition-all flex items-center space-x-2.5 min-w-fit bg-card text-card-foreground hover:bg-accent border border-border"
                   }
                 >
@@ -310,7 +307,7 @@ const HomePage = () => {
                       onClick={() => setSelectedCategory(category.id)}
                       className={
                         isSelected
-                          ? "flex-shrink-0 px-5 py-3 rounded-xl text-sm font-medium transition-all flex items-center space-x-2.5 min-w-fit bg-primary text-primary-foreground shadow-md"
+                          ? "flex-shrink-0 px-5 py-3 rounded-xl text-sm font-medium transition-all flex items-center space-x-2.5 min-w-fit bg-primary text-primary-foreground"
                           : "flex-shrink-0 px-5 py-3 rounded-xl text-sm font-medium transition-all flex items-center space-x-2.5 min-w-fit bg-card text-card-foreground hover:bg-accent border border-border"
                       }
                     >

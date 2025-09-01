@@ -203,34 +203,40 @@ const ChatPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <div className="bg-card shadow-sm sticky top-0 z-40 border-b border-border">
-        <div className="px-4 py-4">
-          <div className="mb-4">
-            <h1 className="text-2xl font-bold text-foreground">Chats</h1>
+      {/* Modern Header with Gradient */}
+      <div className="bg-gradient-to-r from-primary/10 via-primary/5 to-transparent backdrop-blur-sm sticky top-0 z-40 border-b border-border/50">
+        <div className="px-4 py-6">
+          <div className="mb-6">
+            <h1 className="text-3xl font-bold text-foreground bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+              Messages
+            </h1>
+            <p className="text-sm text-muted-foreground mt-1">Stay connected with your marketplace community</p>
           </div>
           
-          {/* Search Bar */}
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" size={16} />
+          {/* Modern Search Bar */}
+          <div className="relative group">
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground group-focus-within:text-primary transition-colors duration-200" size={18} />
             <input
               type="text"
               placeholder="Search conversations..."
-              className="w-full pl-10 pr-4 py-2 bg-muted rounded-xl border-none focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all text-foreground placeholder:text-muted-foreground"
+              className="w-full pl-12 pr-4 py-3 bg-card/50 backdrop-blur-sm rounded-2xl border border-border/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/50 transition-all duration-300 text-foreground placeholder:text-muted-foreground hover:bg-card/70"
             />
           </div>
         </div>
       </div>
 
-      {/* Chat List */}
-      <div className="px-4">
+      {/* Modern Chat List */}
+      <div className="px-4 pb-4">
         {isLoading ? (
-          <div className="flex justify-center py-8">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-500"></div>
+          <div className="flex justify-center py-12">
+            <div className="relative">
+              <div className="animate-spin rounded-full h-10 w-10 border-2 border-primary/20 border-t-primary"></div>
+              <div className="absolute inset-0 animate-pulse rounded-full h-10 w-10 border-2 border-primary/10"></div>
+            </div>
           </div>
         ) : chats && chats.length > 0 ? (
-          <div className="space-y-1">
-            {chats.map((chat) => (
+          <div className="space-y-2">
+            {chats.map((chat, index) => (
               <div
                 key={chat.other_user.id}
                 onClick={async () => {
@@ -248,45 +254,73 @@ const ChatPage = () => {
                   setSelectedChat(chat.other_user.id);
                   setSelectedUserName(chat.other_user.full_name);
                 }}
-                className="flex items-center p-4 hover:bg-accent rounded-xl cursor-pointer transition-all duration-200"
+                className="group flex items-center p-4 hover:bg-card/60 active:bg-card/80 rounded-2xl cursor-pointer transition-all duration-300 hover:scale-[1.01] hover:shadow-md hover:shadow-primary/5 border border-transparent hover:border-border/30 backdrop-blur-sm"
+                style={{
+                  animationDelay: `${index * 100}ms`,
+                  animation: 'fadeInUp 0.6s ease-out forwards'
+                }}
               >
                 <div className="relative">
-                  <div className="w-12 h-12 bg-muted rounded-full flex items-center justify-center">
+                  {/* Modern Avatar with Status Indicator */}
+                  <div className="w-14 h-14 bg-gradient-to-br from-primary/20 to-primary/10 rounded-2xl flex items-center justify-center ring-2 ring-transparent group-hover:ring-primary/20 transition-all duration-300">
                     {chat.other_user.profile_img ? (
                       <img
                         src={chat.other_user.profile_img}
                         alt={chat.other_user.full_name}
-                        className="w-12 h-12 rounded-full object-cover"
+                        className="w-12 h-12 rounded-xl object-cover"
                       />
                     ) : (
-                      <span className="text-sm font-medium text-muted-foreground">
-                        {chat.other_user.full_name.charAt(0)}
+                      <span className="text-lg font-bold text-primary">
+                        {chat.other_user.full_name.charAt(0).toUpperCase()}
                       </span>
                     )}
                   </div>
+
                 </div>
                 
-                <div className="ml-3 flex-1 min-w-0">
-                  <div className="flex items-center justify-between mb-1">
-                    <h3 className="font-semibold text-foreground truncate">{chat.other_user.full_name}</h3>
-                    <span className="text-xs text-muted-foreground ml-2 flex-shrink-0">
-                      {new Date(chat.created_at).toLocaleDateString()}
-                    </span>
+                <div className="ml-4 flex-1 min-w-0">
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="font-semibold text-foreground truncate group-hover:text-primary transition-colors duration-200">
+                      {chat.other_user.full_name}
+                    </h3>
+                    <div className="flex items-center space-x-2">
+                      <span className="text-xs text-muted-foreground bg-muted/50 px-2 py-1 rounded-full">
+                        {new Date(chat.created_at).toLocaleDateString()}
+                      </span>
+
+                    </div>
                   </div>
-                  <p className="text-sm text-muted-foreground truncate">
+                  <p className="text-sm text-muted-foreground truncate group-hover:text-foreground/80 transition-colors duration-200">
                     {chat.message}
                   </p>
+                </div>
+                
+                {/* Hover Arrow */}
+                <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 ml-2">
+                  <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
                 </div>
               </div>
             ))}
           </div>
         ) : (
-          <div className="text-center py-16">
-            <MessageCircle size={64} className="mx-auto text-muted-foreground mb-4" />
-            <h3 className="text-lg font-semibold text-foreground mb-2">No conversations yet</h3>
-            <p className="text-muted-foreground">
-              Start chatting with sellers and buyers by visiting their posts
+          <div className="text-center py-20">
+            <div className="relative mb-8">
+              <div className="w-24 h-24 bg-gradient-to-br from-primary/20 to-primary/10 rounded-3xl flex items-center justify-center mx-auto mb-6">
+                <MessageCircle size={40} className="text-primary" />
+              </div>
+            </div>
+            <h3 className="text-2xl font-bold text-foreground mb-4">Start Your First Conversation</h3>
+            <p className="text-muted-foreground max-w-md mx-auto leading-relaxed mb-8">
+              Connect with sellers and buyers by visiting their posts and starting meaningful conversations about products you're interested in.
             </p>
+            <div className="space-y-3">
+              <div className="inline-flex items-center space-x-2 text-sm text-primary bg-primary/10 px-6 py-3 rounded-2xl border border-primary/20">
+                <span>💬</span>
+                <span>Tap on any post to start chatting</span>
+              </div>
+            </div>
           </div>
         )}
       </div>
